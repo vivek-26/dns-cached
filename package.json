@@ -1,0 +1,54 @@
+{
+  "name": "dns-cached",
+  "version": "0.0.0",
+  "description": "DNS Cache for Node.js",
+  "main": "./lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib coverage",
+    "test": "jest",
+    "commit": "npx git-cz",
+    "build": "cross-env BABEL_ENV=production babel src --out-dir lib",
+    "lint": "eslint src tests",
+    "cover": "jest --coverage",
+    "prepublishOnly": "npm run clean &&  npm run lint && npm run build && npm run cover",
+    "release": "standard-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vivek-26/dns-cached.git"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "keywords": [
+    "DNS",
+    "Cache",
+    "Memoize"
+  ],
+  "author": "Vivek Kumar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vivek-26/dns-cached/issues"
+  },
+  "homepage": "https://github.com/vivek-26/dns-cached#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-minify": "^0.4.3",
+    "commitizen": "^2.10.1",
+    "cross-env": "^5.2.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.1.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0",
+    "jest": "^23.4.1",
+    "rimraf": "^2.6.2",
+    "standard-version": "^4.4.0"
+  }
+}
