@@ -5,6 +5,7 @@
  * @license MIT
  */
 module.exports = {
+  verbose: true,
   testRegex: 'tests/.*\\.(js)$',
   collectCoverageFrom: ['src/**/*.{js}', '!**/node_modules/**'],
   coverageDirectory: 'coverage',
