@@ -1,0 +1,36 @@
+{
+  "env": {
+    "development": {
+      "presets": ["env", {
+        "targets": {
+          "node": "5.0"
+        }
+      }],
+      "plugins": [
+        "add-module-exports"
+      ]
+    },
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "5.0"
+          },
+          "modules": "commonjs"
+        }]
+      ]
+    },
+    "production": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "5.0"
+          }
+        }], "minify"
+      ],
+      "plugins": [
+        "add-module-exports"
+      ]
+    }
+  }
+}
