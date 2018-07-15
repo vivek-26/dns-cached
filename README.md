@@ -1,2 +1,2 @@
 # dns-cached
-DNS Cache for Node.js
+### This library is in **Alpha Stage**
