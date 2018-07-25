@@ -4,6 +4,6 @@
  * @copyright Vivek Kumar 2018
  * @license MIT
  */
-const exampleFn = () => 'DNS Cache for Node.js';
 
-module.exports = { exampleFn };
+/* eslint-disable import/prefer-default-export */
+export { default as dnsCached } from './cached-dns';
