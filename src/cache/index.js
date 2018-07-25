@@ -10,11 +10,11 @@
 class CacheStore {
   /**
    * Creates an instance of CacheStore.
-   * @param {number} ttl TTL value for cache items in minutes.
+   * @param {number} [ttl=1] TTL value for cache items in minutes.
    * @memberof CacheStore
    */
   constructor(ttl = 1) {
-    /* Convert `ttl` from minutes to miliseconds. */
+    /* Convert `ttl` from minutes to milliseconds. */
     this.ttl = ttl * 60 * 1000;
     this.cache = Object.create(null);
   }
