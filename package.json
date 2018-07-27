@@ -1,6 +1,6 @@
 {
   "name": "dns-cached",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "DNS Cache for Node.js",
   "main": "./lib/index.js",
   "scripts": {
