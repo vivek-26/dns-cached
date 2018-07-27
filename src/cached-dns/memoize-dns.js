@@ -30,6 +30,7 @@ const memoize = (fn, cacheObj) => {
 
     /* Overridden callback */
     args.push((err, ...values) => {
+      /* istanbul ignore if */
       if (err) {
         return originalCb(err);
       }
