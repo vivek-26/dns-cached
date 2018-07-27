@@ -3,6 +3,8 @@ import dns from 'dns';
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable arrow-parens */
 /* eslint-disable arrow-body-style */
+/* eslint-disable no-plusplus */
+/* eslint-disable consistent-return */
 
 /**
  * Function to get all methods on DNS instance.
@@ -21,26 +23,39 @@ export const getAllDnsMethods = () =>
  */
 const memoize = (fn, cacheObj) => {
   return function memoized(...args) {
-    const key = JSON.stringify(args);
     const originalCb = args.pop();
+    /* Serialize Arguments */
+    const key = JSON.stringify(args);
 
     if (this.has(key)) {
-      return originalCb(null, ...this.get(key));
+      process.nextTick(() => originalCb(null, ...this.get(key)));
+    } else if (this.queue[key]) {
+      this.queue[key].push(originalCb);
+    } else {
+      this.queue[key] = [originalCb];
+
+      /* Overridden callback */
+      const overrideCb = (err, ...values) => {
+        /* istanbul ignore if */
+        if (err) {
+          return originalCb(err);
+        }
+
+        /* Set result on cache object */
+        this.set(key, values);
+
+        /* Clear the queue for resolved key */
+        const q = this.queue[key];
+        delete this.queue[key];
+        let i = q.length;
+        while (i--) {
+          q[i].call(null, err, ...values);
+        }
+      };
+
+      args.push(overrideCb);
+      return fn(...args);
     }
-
-    /* Overridden callback */
-    args.push((err, ...values) => {
-      /* istanbul ignore if */
-      if (err) {
-        return originalCb(err);
-      }
-
-      /* Set result on cache object */
-      this.set(key, values);
-      return originalCb(err, ...values);
-    });
-
-    return fn(...args);
   }.bind(cacheObj);
 };
 

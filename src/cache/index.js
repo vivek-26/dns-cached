@@ -19,6 +19,7 @@ class CacheStore {
     /* Convert `ttl` from minutes to milliseconds. */
     this.ttl = ttl * 60 * 1000;
     this.cache = Object.create(null);
+    this.queue = Object.create(null);
   }
 
   /**
@@ -63,6 +64,16 @@ class CacheStore {
    */
   getSize() {
     return Object.keys(this.cache).length;
+  }
+
+  /**
+   * Get the number of elements present in queue.
+   * Useful for tests.
+   * @returns {number} Number of elements in queue.
+   * @memberof CacheStore
+   */
+  getQueueSize() {
+    return Object.keys(this.queue).length;
   }
 }
 
