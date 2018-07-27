@@ -5,5 +5,6 @@
  * @license MIT
  */
 
-/* eslint-disable import/prefer-default-export */
-export { default as dnsCached } from './cached-dns';
+import dnsCached from './cached-dns';
+
+export default dnsCached;
