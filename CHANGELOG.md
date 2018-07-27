@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/vivek-26/dns-cached/compare/v0.2.0...v0.2.1) (2018-07-27)
+
+
+### Bug Fixes
+
+* **event loop tick:** fix cache object over-writing ([bbb6208](https://github.com/vivek-26/dns-cached/commit/bbb6208))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/vivek-26/dns-cached/compare/v0.1.0...v0.2.0) (2018-07-27)
 
