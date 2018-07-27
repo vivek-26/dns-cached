@@ -47,4 +47,19 @@ describe('Memoize DNS Module Tests', () => {
       });
     });
   });
+
+  test('dns methods called in the same tick are queued', (done) => {
+    const cacheObj = createCacheStore(0.00083); /* 500 ms */
+    const methods = ['lookup'];
+    memoizeDnsMethods(methods, cacheObj);
+
+    dns.lookup('google.com', { all: true }, () => {});
+    dns.lookup('google.com', { all: true }, () => {
+      expect(cacheObj.getSize()).toBe(1);
+      expect(Object.keys(cacheObj.cache)[0]).toMatch('google.com');
+      expect(cacheObj.getQueueSize()).toBe(0);
+      done();
+    });
+    expect(cacheObj.getQueueSize()).toBe(1);
+  });
 });
