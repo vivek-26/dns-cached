@@ -6,6 +6,8 @@
  * @license MIT
  */
 
+/* eslint-disable arrow-parens */
+
 /** Cache Store Class */
 class CacheStore {
   /**
@@ -52,15 +54,23 @@ class CacheStore {
     /* Handle cache expiry */
     setTimeout(() => delete this.cache[key], this.ttl);
   }
+
+  /**
+   * Get the number of elements present in cache object.
+   * Useful for tests.
+   * @returns {number} Number of elements in cache.
+   * @memberof CacheStore
+   */
+  getSize() {
+    return Object.keys(this.cache).length;
+  }
 }
 
-/* eslint-disable arrow-parens */
 /**
  * Function to create a new instance of Cache Store.
  * @param {number} ttl TTL value for cache items in minutes.
  * @returns {object} Instance of CacheStore class.
  */
 const createCacheStore = (ttl) => new CacheStore(ttl);
-/* eslint-enable arrow-parens */
 
 export default createCacheStore;
