@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/vivek-26/dns-cached/compare/v0.3.0...v0.4.0) (2018-08-01)
+
+
+### Features
+
+* **cache-size:** add support for specifying maximum cache size ([ab6e4fa](https://github.com/vivek-26/dns-cached/commit/ab6e4fa))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/vivek-26/dns-cached/compare/v0.2.3...v0.3.0) (2018-08-01)
 
