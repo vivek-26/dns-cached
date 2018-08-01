@@ -22,7 +22,7 @@ describe('Cache Store Tests', () => {
     expect(typeof cacheObj.cache).toBe('object');
   });
 
-  test('cache store methods - has, get, set', () => {
+  test('cache store methods - has, get, set, getSize', () => {
     const cacheObj = createCacheStore(1);
     const key = 'test';
     const value = 'value';
@@ -30,6 +30,7 @@ describe('Cache Store Tests', () => {
     expect(cacheObj.cache).toMatchObject({ test: 'value' });
     expect(cacheObj.has(key)).toBeTruthy();
     expect(cacheObj.get(key)).toBe(value);
+    expect(typeof cacheObj.getSize()).toBe('number');
   });
 
   test('expired cache items are removed', (done) => {
