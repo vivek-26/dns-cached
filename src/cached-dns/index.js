@@ -14,10 +14,12 @@ import { getAllDnsMethods, memoizeDnsMethods } from './memoize-dns';
 class CachedDNS {
   /**
    * Creates an instance of CachedDNS.
-   * @param {number} [ttl=1] TTL value for cache items in minutes.
+   * @param {number} [ttl] TTL value for cache items in minutes.
+   * @param {object} [config] Config / Options object.
+   * @param {number} [config.maxSize] Maximum number of items to be stored in cache.
    * @memberof CachedDNS
    */
-  constructor(ttl = 1) {
+  constructor(ttl, config) {
     /* Allow only one instance of CachedDNS class */
     if (CachedDNS.$instance) {
       throw new Error('CachedDNS Class already has an instance!');
@@ -26,7 +28,7 @@ class CachedDNS {
     CachedDNS.$instance = this;
 
     /* Create Cache Store Object (Static) */
-    CachedDNS.cacheObj = createCacheStore(ttl);
+    CachedDNS.cacheObj = createCacheStore(ttl, config);
   }
 
   /**
@@ -43,8 +45,10 @@ class CachedDNS {
 /**
  * Function to create a new instance of CachedDNS class.
  * @param {number} ttl TTL value for cache items in minutes.
+ * @param {object} config Config / Options object.
+ * @param {number} config.maxSize Maximum number of items to be stored in cache.
  * @returns {object} Instance of CachedDNS class.
  */
-const dnsCached = (ttl) => new CachedDNS(ttl);
+const dnsCached = (ttl, config) => new CachedDNS(ttl, config);
 
 export default dnsCached;

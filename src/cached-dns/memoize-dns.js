@@ -31,13 +31,19 @@ const memoize = (fn, cacheObj) => {
       process.nextTick(() => originalCb(null, ...this.get(key)));
     } else if (this.queue[key]) {
       this.queue[key].push(originalCb);
+    } else if (this.getSize() >= this.maxSize) {
+      /* Max cache size check */
+      args.push(originalCb);
+      return fn(...args);
     } else {
       this.queue[key] = [originalCb];
+      this.cacheSize += 1;
 
       /* Overridden callback */
       const overrideCb = (err, ...values) => {
         /* istanbul ignore if */
         if (err) {
+          this.cacheSize -= 1;
           return originalCb(err);
         }
 
@@ -61,7 +67,8 @@ const memoize = (fn, cacheObj) => {
 
 /**
  * Function to accept a list of DNS method names and call @func memoize
- * @param {array} methods List of DNS methods to be meoized.
+ * The DNS methods are overridden by their memoized version.
+ * @param {array} methods List of DNS methods to be memoized.
  * @param {object} cacheObj The cache object. Instance of CacheStore Class.
  */
 export const memoizeDnsMethods = (methods = [], cacheObj) => {

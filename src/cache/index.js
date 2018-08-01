@@ -5,6 +5,7 @@
  * @copyright Vivek Kumar 2018
  * @license MIT
  */
+import { pick, isNumeric } from '../utils';
 
 /* eslint-disable arrow-parens */
 
@@ -12,14 +13,20 @@
 class CacheStore {
   /**
    * Creates an instance of CacheStore.
-   * @param {number} [ttl=1] TTL value for cache items in minutes.
+   * @param {number} [ttl] TTL value for cache items in minutes.
+   * @param {object} [config] Config / Options object.
+   * @param {number} [config.maxSize] Maximum number of items to be stored in cache.
    * @memberof CacheStore
    */
-  constructor(ttl = 1) {
+  constructor(ttl, config) {
     /* Convert `ttl` from minutes to milliseconds. */
-    this.ttl = ttl * 60 * 1000;
+    this.ttl = (isNumeric(ttl) ? parseFloat(ttl) : 1) * 60 * 1000;
     this.cache = Object.create(null);
     this.queue = Object.create(null);
+    this.maxSize = pick(config, ['maxSize'])
+      ? Math.floor(config.maxSize) || 1000
+      : 1000;
+    this.cacheSize = 0;
   }
 
   /**
@@ -53,7 +60,10 @@ class CacheStore {
     this.cache[key] = value;
 
     /* Handle cache expiry */
-    setTimeout(() => delete this.cache[key], this.ttl);
+    setTimeout(() => {
+      delete this.cache[key];
+      this.cacheSize -= 1;
+    }, this.ttl);
   }
 
   /**
@@ -63,7 +73,7 @@ class CacheStore {
    * @memberof CacheStore
    */
   getSize() {
-    return Object.keys(this.cache).length;
+    return this.cacheSize;
   }
 
   /**
@@ -79,9 +89,11 @@ class CacheStore {
 
 /**
  * Function to create a new instance of Cache Store.
- * @param {number} ttl TTL value for cache items in minutes.
+ * @param {number} [ttl] TTL value for cache items in minutes.
+ * @param {object} [config] Config / Options object.
+ * @param {number} [config.maxSize] Maximum number of items to be stored in cache.
  * @returns {object} Instance of CacheStore class.
  */
-const createCacheStore = (ttl) => new CacheStore(ttl);
+const createCacheStore = (ttl, config) => new CacheStore(ttl, config);
 
 export default createCacheStore;
