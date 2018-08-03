@@ -15,11 +15,18 @@ describe('Cache Store Tests', () => {
     expect(createCacheStore()).toMatchObject({ ttl: 60000 });
   });
 
-  test('cache store has ttl and cache properties', () => {
-    const cacheObj = createCacheStore(1);
+  test('cache store has ttl, cache, maxSize, cacheSize properties', () => {
+    const cacheObj = createCacheStore(1, { maxSize: 1 });
     expect(cacheObj).toMatchObject({ ttl: 60000 });
     expect(cacheObj).toHaveProperty('cache');
     expect(typeof cacheObj.cache).toBe('object');
+    expect(cacheObj.maxSize).toBe(1);
+    expect(cacheObj.getSize()).toBe(0);
+  });
+
+  test('default value of maxSize is 1000', () => {
+    const cacheObj = createCacheStore(1, { maxSize: 'invalid' });
+    expect(cacheObj.maxSize).toBe(1000);
   });
 
   test('cache store methods - has, get, set, getSize', () => {

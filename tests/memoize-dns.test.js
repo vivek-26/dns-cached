@@ -62,4 +62,20 @@ describe('Memoize DNS Module Tests', () => {
     });
     expect(cacheObj.getQueueSize()).toBe(1);
   });
+
+  test('when maxSize is exceeded, dns methods are not memoized', (done) => {
+    const cacheObj = createCacheStore(0.0083, { maxSize: 1 });
+    const methods = ['lookup'];
+    memoizeDnsMethods(methods, cacheObj);
+
+    dns.lookup('google.com', { all: true }, () => {
+      dns.lookup('reddit.com', { all: true }, () => {
+        expect(cacheObj.getSize()).toBe(1);
+        expect(Object.keys(cacheObj.cache)[0]).toMatch('google.com');
+        expect(cacheObj.getQueueSize()).toBe(0);
+        done();
+      });
+    });
+    expect(cacheObj.getQueueSize()).toBe(1);
+  });
 });
