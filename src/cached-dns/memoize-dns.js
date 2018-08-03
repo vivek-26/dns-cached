@@ -17,15 +17,16 @@ export const getAllDnsMethods = () =>
 
 /**
  * Function to accept a DNS method and memoize it.
+ * @param {string} method Function name to be memoized.
  * @param {function} fn Function to be memoized.
  * @param {object} cacheObj The cache object. Instance of CacheStore Class.
  * @returns {function} Memoized DNS Method.
  */
-const memoize = (fn, cacheObj) => {
+const memoize = (method, fn, cacheObj) => {
   return function memoized(...args) {
     const originalCb = args.pop();
     /* Serialize Arguments */
-    const key = JSON.stringify(args);
+    const key = `${method}_${JSON.stringify(args)}`;
 
     if (this.has(key)) {
       process.nextTick(() => originalCb(null, ...this.get(key)));
@@ -73,6 +74,6 @@ const memoize = (fn, cacheObj) => {
  */
 export const memoizeDnsMethods = (methods = [], cacheObj) => {
   methods.forEach((m) => {
-    dns[m] = memoize(dns[m], cacheObj);
+    dns[m] = memoize(m, dns[m], cacheObj);
   });
 };
