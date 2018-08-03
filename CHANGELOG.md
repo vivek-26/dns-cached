@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.4"></a>
+## [0.4.4](https://github.com/vivek-26/dns-cached/compare/v0.4.3...v0.4.4) (2018-08-03)
+
+
+### Bug Fixes
+
+* **serializer:** add method name as prefix to avoid conflicts ([9e3c5fe](https://github.com/vivek-26/dns-cached/commit/9e3c5fe))
+
+
+
 <a name="0.4.3"></a>
 ## [0.4.3](https://github.com/vivek-26/dns-cached/compare/v0.4.2...v0.4.3) (2018-08-03)
 
