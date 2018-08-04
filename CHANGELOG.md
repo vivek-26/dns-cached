@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/vivek-26/dns-cached/compare/v0.4.4...v0.5.0) (2018-08-04)
+
+
+### Features
+
+* **override methods:** added options for specifying the dns methods to be memoized ([16dde12](https://github.com/vivek-26/dns-cached/commit/16dde12))
+
+
+
 <a name="0.4.4"></a>
 ## [0.4.4](https://github.com/vivek-26/dns-cached/compare/v0.4.3...v0.4.4) (2018-08-03)
 
