@@ -55,8 +55,9 @@ const memoize = (method, fn, cacheObj) => {
         const q = this.queue[key];
         delete this.queue[key];
         let i = q.length;
+        let j = 0;
         while (i--) {
-          q[i].call(null, err, ...values);
+          q[j++].call(null, err, ...values);
         }
       };
 
