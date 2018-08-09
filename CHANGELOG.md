@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/vivek-26/dns-cached/compare/v0.5.0...v0.5.1) (2018-08-09)
+
+
+### Bug Fixes
+
+* **callback order:** fix callback queue processing order ([f9eef7c](https://github.com/vivek-26/dns-cached/commit/f9eef7c))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/vivek-26/dns-cached/compare/v0.4.4...v0.5.0) (2018-08-04)
 
