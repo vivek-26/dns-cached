@@ -4,6 +4,7 @@
  * @copyright Vivek Kumar 2018
  * @license MIT
  */
+import dns from 'dns';
 import * as memoizeDns from '../src/cached-dns/memoize-dns';
 import dnsCached, { CachedDNS } from '../src/cached-dns';
 
@@ -79,5 +80,22 @@ describe('CachedDNS Module Tests', () => {
 
     expect(getAllDnsMethodsMock).toHaveBeenCalledTimes(1);
     expect(memoizeDnsMethodsMock).toHaveBeenCalledTimes(1);
+  });
+
+  test('flush clears all items and timeouts from cache', (done) => {
+    CachedDNS.$instance = undefined;
+    const cacheddns = new CachedDNS(1);
+    cacheddns.overrideMethods('lookup');
+    const noop = () => {};
+
+    cacheddns.on('flush-cache', (stats) => {
+      expect(stats).toMatchObject({ status: true, nTimeouts: 2, nKeys: 2 });
+      done();
+    });
+
+    dns.lookup('google.com', { all: true }, noop);
+    dns.lookup('reddit.com', { all: true }, noop);
+    dns.lookup('google.com', { all: true }, noop);
+    cacheddns.flush();
   });
 });
