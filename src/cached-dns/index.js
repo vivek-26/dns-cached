@@ -4,6 +4,7 @@
  * @copyright Vivek Kumar 2018
  * @license MIT
  */
+import EventEmitter from 'events';
 import createCacheStore from '../cache';
 import { getAllDnsMethods, memoizeDnsMethods } from './memoize-dns';
 
@@ -11,7 +12,7 @@ import { getAllDnsMethods, memoizeDnsMethods } from './memoize-dns';
 /* eslint-disable arrow-parens */
 
 /** Cached DNS Class - Override DNS Methods */
-export class CachedDNS {
+export class CachedDNS extends EventEmitter {
   /**
    * Creates an instance of CachedDNS.
    * @param {number} [ttl] TTL value for cache items in minutes.
@@ -20,6 +21,7 @@ export class CachedDNS {
    * @memberof CachedDNS
    */
   constructor(ttl, config) {
+    super();
     /* Allow only one instance of CachedDNS class */
     if (CachedDNS.$instance) {
       throw new Error('CachedDNS Class already has an instance!');
@@ -31,6 +33,22 @@ export class CachedDNS {
 
     /* Create Cache Store Object (Static) */
     CachedDNS.cacheObj = createCacheStore(ttl, config);
+
+    /**
+     * Flush Complete Event Listener.
+     * @listens CacheStore#flush-complete
+     */
+    CachedDNS.cacheObj.on('flush-complete', (stats) => {
+      /**
+       * Flush Cache Event.
+       * @event CachedDNS#flush-cache
+       * @type {object}
+       * @property {boolean} status Indicates status.
+       * @property {number} nTimeouts Number of timeouts cleared.
+       * @property {number} nKeys Number of cache items cleared.
+       */
+      this.emit('flush-cache', stats);
+    });
   }
 
   /**
@@ -61,6 +79,16 @@ export class CachedDNS {
 
     memoizeDnsMethods(this.methods, CachedDNS.cacheObj);
     return true;
+  }
+
+  /**
+   * Flushes the cache and clears all timers.
+   * Once flushing is complete, emits `flush-cache` event with stats object.
+   * @memberof CachedDNS
+   */
+  flush() {
+    CachedDNS.cacheObj.flush = true;
+    CachedDNS.cacheObj.flushCache();
   }
 }
 

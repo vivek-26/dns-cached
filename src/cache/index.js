@@ -5,12 +5,15 @@
  * @copyright Vivek Kumar 2018
  * @license MIT
  */
+import EventEmitter from 'events';
 import { pick, isNumeric } from '../utils';
 
 /* eslint-disable arrow-parens */
+/* eslint-disable consistent-return */
+/* eslint-disable no-plusplus */
 
 /** Cache Store Class */
-class CacheStore {
+class CacheStore extends EventEmitter {
   /**
    * Creates an instance of CacheStore.
    * @param {number} [ttl] TTL value for cache items in minutes.
@@ -19,14 +22,17 @@ class CacheStore {
    * @memberof CacheStore
    */
   constructor(ttl, config) {
+    super();
     /* Convert `ttl` from minutes to milliseconds. */
     this.ttl = (isNumeric(ttl) ? parseFloat(ttl) : 1) * 60 * 1000;
     this.cache = Object.create(null);
     this.queue = Object.create(null);
+    this.timeoutIds = Object.create(null);
     this.maxSize = pick(config, ['maxSize'])
       ? Math.floor(config.maxSize) || 1000
       : 1000;
     this.cacheSize = 0;
+    this.flush = false;
   }
 
   /**
@@ -60,8 +66,9 @@ class CacheStore {
     this.cache[key] = value;
 
     /* Handle cache expiry */
-    setTimeout(() => {
+    this.timeoutIds[key] = setTimeout(() => {
       delete this.cache[key];
+      delete this.timeoutIds[key];
       this.cacheSize -= 1;
     }, this.ttl);
   }
@@ -84,6 +91,46 @@ class CacheStore {
    */
   getQueueSize() {
     return Object.keys(this.queue).length;
+  }
+
+  /**
+   * Clear / Reset the cache and timers.
+   * Emits `flush-complete` event with stats upon completion.
+   * @fires CacheStore#flush-complete
+   * @memberof CacheStore
+   */
+  flushCache() {
+    /* If items are present in queue, and flush is set, delay flushing */
+    if (this.flush && this.getQueueSize()) {
+      return setImmediate(() => this.flushCache());
+    }
+
+    /* Clear all timeouts */
+    const timerKeys = Object.keys(this.timeoutIds);
+    let i = timerKeys.length;
+    let j = 0;
+    while (i--) {
+      clearTimeout(this.timeoutIds[timerKeys[j++]]);
+    }
+    /* For tests */
+    const nKeys = this.cacheSize;
+
+    /* Loose references to old objects */
+    this.cache = Object.create(null);
+    this.queue = Object.create(null);
+    this.timeoutIds = Object.create(null);
+    this.cacheSize = 0;
+    this.flush = false;
+
+    /**
+     * Flush Complete Event, good for tests.
+     * @event CacheStore#flush-complete
+     * @type {object}
+     * @property {boolean} status Indicates status.
+     * @property {number} nTimeouts Number of timeouts cleared.
+     * @property {number} nKeys Number of cache items cleared.
+     */
+    this.emit('flush-complete', { status: true, nTimeouts: j, nKeys });
   }
 }
 
