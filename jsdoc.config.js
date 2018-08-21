@@ -15,7 +15,7 @@ module.exports = {
   templates: {
     systemName: 'dns-cached',
     inverseNav: true,
-    theme: 'flatly',
+    theme: 'journal',
     copyright: 'Vivek Kumar 2018',
     dateFormat: 'dddd, MMMM Do YYYY, h:mm:ss a',
     linenums: true,
