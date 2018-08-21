@@ -115,7 +115,12 @@ class CacheStore extends EventEmitter {
     /* For tests */
     const nKeys = this.cacheSize;
 
-    /* Loose references to old objects */
+    /* Delete old objects */
+    delete this.cache;
+    delete this.queue;
+    delete this.timeoutIds;
+
+    /* Reset cache */
     this.cache = Object.create(null);
     this.queue = Object.create(null);
     this.timeoutIds = Object.create(null);
